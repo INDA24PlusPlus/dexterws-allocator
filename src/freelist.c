@@ -157,3 +157,13 @@ void *realloc(void *ptr, u64 size) {
     free(ptr);
     return new;
 }
+
+u64 count_free_memory() {
+    u64 count = 0;
+    Header *current = allocator.head;
+    while (current != NULL) {
+        count += current->size;
+        current = current->free.next;
+    }
+    return count;
+}
