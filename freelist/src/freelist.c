@@ -1,5 +1,5 @@
 #include <string.h>
-#include <unistd.h>
+#include <sys/mman.h>
 #include "goodtypes.h"
 
 // Magic number to check integrity of the header
@@ -50,7 +50,7 @@ u64 align_chunk(u64 size) {
 // Request a new chunk from the OS
 void* new_chunk(u64 size) {
     size = align_chunk(size);
-    void *ptr = sbrk(size);
+    void *ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     if (ptr == (void *)-1) {
         return NULL;
     }
